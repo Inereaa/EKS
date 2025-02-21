@@ -1,0 +1,8 @@
+pdf.pdf
+node_modules
+clave.key
+.terraform
+.terraform.lock.hcl
+terraform.tfstate
+terraform.tfstate.backup
+.env.local

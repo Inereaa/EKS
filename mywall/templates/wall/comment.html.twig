@@ -1,0 +1,89 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nitter{% endblock %}
+
+{% block body %}
+    <div class="container mt-5">
+        <div class="post-comments">
+            <h4 class="text-center mb-4">Comentarios</h4>
+
+            {# Mostrar solo los comentarios de primer nivel (sin padres) #}
+            {% for comment in post.comments %}
+                {% if comment.parent is null %}
+                    <div class="comment mb-4 p-4 bg-light border rounded shadow-sm">
+                        <p><strong>{{ comment.author.username }}</strong> dijo:</p>
+                        <p>{{ comment.content }}</p>
+                        <p class="text-muted small">Publicado el {{ comment.date|date('d/m/Y H:i') }}</p>
+
+                        {# Mostrar el botón de respuesta solo si el comentario es de primer nivel (sin padres) #}
+                        <a href="{{ path('app_wall_reply', {'id': comment.id}) }}" class="btn btn-sm btn-link">Responder</a>
+
+                        {# Mostrar las respuestas (comentarios hijos) solo si existen #}
+                        {% if comment.comments|length > 0 %}
+                            <div class="replies mt-3 ps-3 border-start">
+                                {% for reply in comment.comments %}
+                                    <div class="reply mb-3 p-3 bg-light border rounded shadow-sm">
+                                        <p><strong>{{ reply.author.username }}</strong> respondió:</p>
+                                        <p>{{ reply.content }}</p>
+                                        <p class="text-muted small">Publicado el {{ reply.date|date('d/m/Y H:i') }}</p>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                {% endif %}
+            {% endfor %}
+
+            {# Formulario para agregar un nuevo comentario #}
+            <div class="add-comment mt-5">
+                <h5>Agregar un comentario</h5>
+                {{ form_start(form) }}
+                    <div class="mb-3">
+                        {{ form_row(form.content, { 'attr': { 'class': 'form-control', 'placeholder': 'Escribe tu comentario aquí...' } }) }}
+                    </div>
+                    <div class="mb-3">
+                        {{ form_row(form.submit, { 'attr': { 'class': 'btn btn-info text-white px-4 py-2 rounded-pill shadow-sm' } }) }}
+                    </div>
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .comment, .reply {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .comment:hover, .reply:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .add-comment .form-control {
+            border-radius: 10px;
+            padding: 12px 15px;
+        }
+
+        .add-comment .btn {
+            background-color: #0056b3; /* Azul más oscuro */
+            transition: background-color 0.3s ease;
+        }
+
+        .add-comment .btn:hover {
+            background-color: #004085; /* Azul aún más oscuro */
+            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .post-comments .text-muted {
+            font-size: 0.9rem;
+        }
+
+        .border-start {
+            border-left: 3px solid #007bff;
+        }
+
+        .replies {
+            margin-left: 20px;
+        }
+    </style>
+{% endblock %}

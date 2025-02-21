@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neikap</title>
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+    <nav>
+        <section class="navegador">
+            <a href="#"><img id="logo" src="./docs/logo.png" alt="logo"></a>
+            <h1> NEIKAP </h1>
+            <div class="navegador__links">
+                <a href="./docs/carrito.html" id="carrito">
+                    <img src="https://cdn-icons-png.flaticon.com/512/1170/1170678.png" alt="carrito" style="width: 25px; height: 25px; vertical-align: middle;">
+                    <span id="contador-carrito">0</span>
+                </a>
+                <a href="#">Inicio</a>
+                <a href="./docs/login.html" id="cerrarSesion">Cerrar sesión</a>
+            </div>
+        </section>
+    </nav>
+    <main>
+        <section class="filtros">
+            <div class="categorias">
+                <label for="categoria">Filtrar por categoría: </label>
+                <select id="categoria">
+                    <option value="c">Selecciona una categoría</option>
+                    <option value="lip_liner">Delineador de labios</option>
+                    <option value="lipstick">Pintalabios</option>
+                    <option value="foundation">Base</option>
+                    <option value="eyeliner">Delineador de ojos</option>
+                    <option value="eyeshadow">Sombra de ojos</option>
+                    <option value="blush">Colorete</option>
+                    <option value="bronzer">Bronceador</option>
+                    <option value="mascara">Máscara de pestañas</option>
+                    <option value="eyebrow">Cejas</option>
+                    <option value="nail_polish">Esmalte de uñas</option>
+                </select>
+            </div>
+    
+            <div>
+                <label for="precio">Ordenar por precio:</label>
+                <select id="precio">
+                    <option value="desc">Descendente</option>
+                    <option value="asc">Ascendente</option>
+                </select>
+            </div>
+        </section>
+
+        <div id="detalles">
+            <div id="detalles__ventana">
+                <!-- aquí van los detalles de los productos -->
+            </div>
+        </div>
+        
+            
+        <div id="respuestaDelServidor"></div>
+        <!-- aquí salen todos los productos -->
+    </main>
+
+    <footer class="footer">
+        <div class="footer__container">
+            <div class="footer__column">
+                <h3>SOBRE NOSOTROS</h3>
+                <ul>
+                    <li><a href="#">Quiénes Somos</a></li>
+                    <li><a href="#">Blogger de Moda</a></li>
+                    <li><a href="#">Responsabilidad Social</a></li>
+                    <li><a href="#">Empleo</a></li>
+                    <li><a href="#">Afiliaciones</a></li>
+                </ul>
+            </div>
+            <div class="footer__column">
+                <h3>AYUDA & APOYO</h3>
+                <ul>
+                    <li><a href="#">Información de Envío</a></li>
+                    <li><a href="#">Devolución</a></li>
+                    <li><a href="#">Reembolso</a></li>
+                    <li><a href="#">Preguntas Frecuentes</a></li>
+                </ul>
+            </div>
+            <div class="footer__column">
+                <h3>SERVICIO AL CLIENTE</h3>
+                <ul>
+                    <li><a href="#">Contáctanos</a></li>
+                    <li><a href="#">Pagos & Impuestos</a></li>
+                    <li><a href="#">Puntos</a></li>
+                </ul>
+            </div>
+            <div class="footer__social">
+                <h3>ENCUÉNTRANOS EN</h3>
+                <div class="footer__icons">
+                    <a href="#"><img src="../css/images/facebook.webp" alt="Facebook"></a>
+                    <a href="#"><img src="../css/images/ig.webp" alt="Instagram"></a>
+                    <a href="#"><img src="../css/images/twitter.webp" alt="Twitter"></a>
+                    <a href="#"><img src="../css/images/yt.webp" alt="YouTube"></a>
+                </div>
+                <h3>ACEPTAMOS PAGOS CON:</h3>
+                <div class="footer__pagos">
+                    <div><img src="../css/images/paypal.webp" alt="PayPal"></div>
+                    <div><img src="../css/images/mastercard.webp" alt="Mastercard"></div>
+                    <div><img src="../css/images/applepay.webp" alt="Apple Pay"></div>
+                    <div><img src="../css/images/aex.webp" alt="American Express"></div>
+                    <div><img src="../css/images/visa.webp" alt="Visa"></div>
+                    <div><img src="../css/images/googlepay.webp" alt="Google Pay"></div>
+                </div>
+            </div>
+        </div>
+        <div class="footer__bottom">
+            <p>©2025 NEIKAP Todos los derechos reservados</p>
+            <div class="footer__links">
+                <a href="#">Política de Privacidad</a> | 
+                <a href="#">Términos y Condiciones</a> | 
+                <a href="#">Gestión de Cookies</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="./js/funciones.js"></script>
+</body>
+</html>

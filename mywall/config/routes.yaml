@@ -1,0 +1,9 @@
+controllers:
+    resource:
+        path: ../src/Controller/
+        namespace: App\Controller
+    type: attribute
+auth_login:
+    path: /api/login
+    #controller: App\Controller\AuthController::login
+    methods: [GET, POST]

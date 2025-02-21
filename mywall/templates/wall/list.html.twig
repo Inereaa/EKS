@@ -1,0 +1,66 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nitter{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <div class="text-center mb-5">
+        <h4 class="display-4 text-primary">Lista de Usuarios</h4>
+    </div>
+
+    <div class="row">
+        {% for user in users %}
+            <div class="col-md-4 mb-4">
+                <div class="card shadow-lg border-light rounded-lg hover-shadow">
+                    <div class="card-body d-flex flex-column justify-content-between">
+                        <h5 class="card-title text-center text-primary">{{ user.username }}</h5>
+                        <div class="d-flex justify-content-center mt-auto">
+                            <a href="{{ path('app_wall_user_wall', {'id': user.id}) }}" class="btn custom-btn text-white px-4 py-2 rounded-pill shadow-sm hover-shadow">
+                                Ver muro
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <div class="alert alert-info" role="alert">
+                No hay usuarios registrados.
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+<style>
+    .card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .custom-btn {
+        background-color: #0056b3;
+        transition: background-color 0.3s ease;
+    }
+
+    .custom-btn {
+        transition: background-color 0.3s ease;
+    }
+
+    .custom-btn:hover {
+        background-color:rgb(6, 31, 84);
+        box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .hover-shadow:hover {
+        box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .text-primary {
+        color:black !important;
+    }
+</style>
+
+{% endblock %}

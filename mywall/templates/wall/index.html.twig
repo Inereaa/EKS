@@ -1,0 +1,59 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nitter{% endblock %}
+
+{% block body %}
+<style>
+    .post-card { border-radius: 12px; overflow: hidden; transition: transform 0.3s ease-in-out; }
+    .post-card:hover { transform: scale(1.02); }
+    .comment-box { background: #f8f9fa; padding: 10px; border-radius: 8px; }
+    .reply-box { background: #e9ecef; padding: 8px; border-radius: 8px; margin-left: 15px; }
+</style>
+
+<div class="container mt-4">
+    <div class="text-center mb-4">
+        {% if app.user.username == user.username %}
+            <h2 class="fw-bold">Tu Muro, {{ app.user.username }}</h2>
+            <a href="{{ path('app_wall_newpost') }}" class="btn btn-primary">+ Nuevo post</a>
+        {% else %}
+            <h2 class="fw-bold text-secondary">Muro de {{ user.username }}</h2>
+        {% endif %}
+    </div>
+
+    {% if user.posts|length > 0 %}
+        <div class="row">
+            {% for post in user.posts|sort((a, b) => b.date <=> a.date) %}
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card shadow-sm post-card">
+                        <div class="card-body d-flex flex-column">
+                            <p class="card-text">{{ post.content }}</p>
+                            <div class="mt-auto">
+                                <p class="text-muted small mb-0">Publicado el {{ post.date|date('d/m/Y H:i') }}</p>
+                            </div>
+                            {% if post.image %}
+                                <img src="{{ asset('uploads/' ~ post.image) }}" class="img-fluid mt-2" alt="Imagen del post">
+                            {% endif %}
+
+                            {% if app.user == post.author %}
+                                <form action="{{ path('app_wall_deletepost', { 'id': post.id }) }}" method="post" onsubmit="return confirm('¿Seguro que quieres eliminar este post?');">
+                                    <button type="submit" class="btn btn-danger btn-sm mt-2">Eliminar</button>
+                                </form>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- sección de comentarios -->
+                    <div class="mt-3">
+                        <a href="{{ path('app_wall_comment', {'id': post.id}) }}" class="btn btn-sm btn-outline-primary">Ver comentarios</a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-info text-center" role="alert">
+            Aún no hay publicaciones.
+        </div>
+    {% endif %}
+</div>
+
+{% endblock %}

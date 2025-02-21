@@ -1,0 +1,39 @@
+<style>
+  .navbar-nav .nav-link {
+    transition: all 0.3s ease-in-out;
+    font-weight: bold;
+    margin-right: 20px;
+  }
+
+  .navbar-nav .nav-link:hover {
+    color:black !important;
+    transform: scale(1.2) !important;
+  }
+</style>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
+  <div class="container-fluid">
+    <a class="navbar-brand fw-bold" href="{{ path('app_wall') }}">NITTER</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto">
+        {% if app.user %}
+          <li class="nav-item">
+            <a class="nav-link text-white" href="{{ path('app_wall') }}"><i class="fas fa-home"></i> MIS POSTS</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-white" href="{{ path('app_wall_newpost') }}"><i class="fas fa-plus-circle"></i> Nuevo post</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-white" href="{{ path('app_wall_users') }}"><i class="fas fa-users"></i> Usuarios</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-white" href="{{ path('app_logout') }}"><i class="fas fa-sign-out-alt"></i> Salir</a>
+          </li>
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+</nav>
