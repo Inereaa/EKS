@@ -64,15 +64,11 @@ jobs:
         run: |
           chmod +x deploy.sh
           ./deploy.sh
-
-      # INSTALAR LFTP PARA EL UPLOAD FTP
-      - name: Instalar lftp
-        run: sudo apt-get install lftp
-
+          
       # SUBIR ARCHIVOS A SERVIDOR VIA FTP
       - name: FTP upload
         run: |
-          lftp -u ${{ secrets.FTP_USER }},${{ secrets.FTP_PASS }} ${{ secrets.FTP_HOST }} <<EOF
+          lftp -u nerea,nerea ftp://neikap.work.gd <<EOF
           mirror -R ./public /var/www/symfony/public
           mirror -R ./var /var/www/symfony/var
           mirror -R ./config /var/www/symfony/config
