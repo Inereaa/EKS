@@ -64,17 +64,6 @@ jobs:
         run: |
           chmod +x deploy.sh
           ./deploy.sh
-          
-      # SUBIR ARCHIVOS A SERVIDOR VIA FTP
-      - name: FTP upload
-        run: |
-          lftp -u nerea,nerea ftp://neikap.work.gd <<EOF
-          mirror -R ./public /var/www/symfony/public
-          mirror -R ./var /var/www/symfony/var
-          mirror -R ./config /var/www/symfony/config
-          mirror -R ./src /var/www/symfony/src
-          mirror -R ./templates /var/www/symfony/templates
-          EOF
 
   destroy:
     runs-on: ubuntu-latest
