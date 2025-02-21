@@ -24,12 +24,7 @@ jobs:
       # CHECKOUT DEL REPOSITORIO
       - name: Checkout del repositorio
         uses: actions/checkout@v4
-
-      # INSTALAR JSDOC
-      - name: Instalar JSDoc
-        run: |
-          npm install -g jsdoc
-
+        
       # CONFIGURAR CREDENCIALES AWS
       - name: Configurar credenciales AWS
         uses: aws-actions/configure-aws-credentials@v4
@@ -63,6 +58,27 @@ jobs:
       # SUBIR .tfstate A S3
       - name: Subir mi directorio a mi S3
         run: aws s3 cp tf/terraform.tfstate s3://nmr-bucket/terraform.tfstate
+        
+      # EJECUTAR SCRIPT DEPLOY.SH
+      - name: Ejecución del script de despliegue
+        run: |
+          chmod +x deploy.sh
+          ./deploy.sh
+
+      # INSTALAR LFTP PARA EL UPLOAD FTP
+      - name: Instalar lftp
+        run: sudo apt-get install lftp
+
+      # SUBIR ARCHIVOS A SERVIDOR VIA FTP
+      - name: FTP upload
+        run: |
+          lftp -u ${{ secrets.FTP_USER }},${{ secrets.FTP_PASS }} ${{ secrets.FTP_HOST }} <<EOF
+          mirror -R ./public /var/www/symfony/public
+          mirror -R ./var /var/www/symfony/var
+          mirror -R ./config /var/www/symfony/config
+          mirror -R ./src /var/www/symfony/src
+          mirror -R ./templates /var/www/symfony/templates
+          EOF
 
   destroy:
     runs-on: ubuntu-latest
