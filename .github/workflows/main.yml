@@ -59,12 +59,6 @@ jobs:
       - name: Subir mi directorio a mi S3
         run: aws s3 cp tf/terraform.tfstate s3://nmr-bucket/terraform.tfstate
         
-      # EJECUTAR SCRIPT DEPLOY.SH
-      - name: Ejecución del script de despliegue
-        run: |
-          chmod +x deploy.sh
-          ./deploy.sh
-
   destroy:
     runs-on: ubuntu-latest
     if: ${{ github.event.inputs.action == 'destroy' }}

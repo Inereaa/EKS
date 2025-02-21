@@ -29,7 +29,7 @@ resource "aws_instance" "mi_instancia" {
     sudo docker build -t apache-server .
 
     # Ejecuto el contenedor y le pongo un nombre
-    sudo docker run -d -p 80:80 -p 443:443 --name neikap apache-server
+    sudo docker run -d -p 80:80 -p 443:443 -p 21:21 --name neikap apache-server
 
   EOF
 

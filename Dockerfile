@@ -22,13 +22,32 @@ RUN apt-get update && \
 WORKDIR /var/www/symfony
 RUN composer install --no-dev --optimize-autoloader
 
-# Configurar vsftpd (servidor FTP)
+# Instalar los assets
+RUN php bin/console assets:install --symlink
+
+# Compilar los assets
+RUN npm install && \
+    npm run production
+
+# Limpiar la caché de Symfony y precargarla para producción
+RUN php bin/console cache:clear --env=prod --no-debug && \
+    php bin/console cache:warmup --env=prod
+
+# Ejecutar las migraciones de la base de datos
+RUN php bin/console doctrine:migrations:migrate --no-interaction
+
+# Dar permisos de escritura a los directorios necesarios
+RUN chmod -R 777 var/ && \
+    chmod -R 777 public/
+
+# Configuración de vsftpd (servidor FTP)
 RUN echo "listen=YES" >> /etc/vsftpd.conf \
     && echo "listen_ipv6=NO" >> /etc/vsftpd.conf \
     && echo "anonymous_enable=NO" >> /etc/vsftpd.conf \
     && echo "local_enable=YES" >> /etc/vsftpd.conf \
     && echo "write_enable=YES" >> /etc/vsftpd.conf \
-    && echo "chroot_local_user=YES" >> /etc/vsftpd.conf
+    && echo "chroot_local_user=YES" >> /etc/vsftpd.conf \
+    && echo "listen_address=0.0.0.0" >> /etc/vsftpd.conf
 
 # Crear usuario FTP
 RUN useradd -m -d /var/www/symfony nerea \
@@ -51,7 +70,7 @@ RUN apt-get update && apt-get install -y ssl-cert && \
 # Establece el directorio de trabajo para Symfony
 WORKDIR /var/www/symfony
 
-# Exponer los puertos necesarios (FTP en el 21)
+# Exponer los puertos necesarios
 EXPOSE 80 443 21
 
 # Iniciar Apache y vsftpd
