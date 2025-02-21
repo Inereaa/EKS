@@ -1,0 +1,124 @@
+name: EKS - symfony
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+    inputs:
+      action:
+        description: 'Elige una opción'
+        required: true
+        type: choice
+        options:
+          - deploy
+          - destroy
+        default: deploy
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.inputs.action == 'deploy' }}
+
+    steps:
+      # CHECKOUT DEL REPOSITORIO
+      - name: Checkout del repositorio
+        uses: actions/checkout@v4
+
+      # INSTALAR JSDOC
+      - name: Instalar JSDoc
+        run: |
+          npm install -g jsdoc
+
+      # DOCUMENTAR EL JAVASCRIPT
+      - name: Generar la documentación JavaScript
+        run: |
+          jsdoc ./js/login.js -d ./js/docs
+
+      # INSTALAR JSEST (para pruebas unitarias)
+      - name: Instalar Jest para pruebas unitarias
+        run: |
+          npm install --save-dev jest
+
+      # REALIZAR LAS PRUEBAS UNITARIAS
+      - name: Pruebas unitarias
+        run: |
+          npm test
+
+      # CONFIGURAR CREDENCIALES AWS
+      - name: Configurar credenciales AWS
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
+          aws-region: us-east-1
+          
+      # INSTALAR TERRAFORM
+      - name: Setup terraform
+        run: |
+          cd tf
+          curl -Lo terraform.zip https://releases.hashicorp.com/terraform/1.4.0/terraform_1.4.0_linux_amd64.zip
+          unzip terraform.zip
+          sudo mv terraform /usr/local/bin/
+          terraform --version
+
+      # TERRAFORM INIT
+      - name: TERRAFORM INIT
+        run: |
+          cd tf
+          terraform init
+
+      # TERRAFORM APPLY
+      - name: TERRAFORM APPLY
+        run: |
+          cd tf
+          terraform apply -auto-approve
+
+      # SUBIR .tfstate A S3
+      - name: Subir mi directorio a mi S3
+        run: aws s3 cp tf/terraform.tfstate s3://nmr-bucket/terraform.tfstate
+
+  destroy:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.inputs.action == 'destroy' }}
+
+    steps:
+      # CHECKOUT DEL REPOSITORIO
+      - name: Checkout del repositorio
+        uses: actions/checkout@v4
+
+      # CONFIGURAR CREDENCIALES AWS
+      - name: Configurar credenciales AWS
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
+          aws-region: us-east-1
+
+      # INSTALAR TERRAFORM
+      - name: Setup terraform
+        run: |
+          cd tf
+          curl -Lo terraform.zip https://releases.hashicorp.com/terraform/1.4.0/terraform_1.4.0_linux_amd64.zip
+          unzip terraform.zip
+          sudo mv terraform /usr/local/bin/
+          terraform --version
+
+      # TERRAFORM INIT
+      - name: TERRAFORM INIT
+        run: |
+          cd tf
+          terraform init
+
+      # DESCARGAR tf.state
+      - name: Descargar estado de Terraform desde S3
+        run: |
+          aws s3 cp s3://nmr-bucket/terraform.tfstate tf/terraform.tfstate
+
+      # TERRAFORM DESTROY
+      - name: TERRAFORM DESTROY
+        run: |
+          cd tf
+          terraform destroy -auto-approve
